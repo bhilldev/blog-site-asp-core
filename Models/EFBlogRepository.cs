@@ -3,26 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace BlogsForSale.Models
+namespace BlogSite.Models
 {
-    public class EFBlogRepository : IBlogRepository
+    public class EFBlogPostRepository : IBlogPostRepository
     {
-        private EFDbContext context = new EFDbContext();
-        public IEnumerable<Blog> Blogs
+        private BlogDbContext context = new BlogDbContext();
+        public IEnumerable<BlogPost> BlogPosts
         {
-            get { return context.Blogs; }
+            get { return context.BlogPosts; }
         }
 
 
-        public void SaveBlog(Blog blog)
+        public void SaveBlogPost(BlogPost blog)
         {
-            if (blog.BlogID == 0)
+            if (blog.Id == 0)
             {
-                context.Blogs.Add(blog);
+                context.BlogPosts.Add(blog);
             }
             else
             {
-                Blog dbEntry = context.Blogs.Find(blog.BlogID);
+                BlogPost dbEntry = context.BlogPosts.Find(blog.Id);
                 if (dbEntry != null)
                 {
                     dbEntry.Title = blog.Title;
@@ -34,12 +34,12 @@ namespace BlogsForSale.Models
             }
             context.SaveChanges();
         }
-        public Blog DeleteBlog(int productID)
+        public BlogPost DeleteBlogPost(int blogID)
         {
-            Blog dbEntry = context.Blogs.Find(blogID);
+            BlogPost dbEntry = context.BlogPosts.Find(blogID);
             if (dbEntry != null)
             {
-                context.Blogs.Remove(dbEntry);
+                context.BlogPosts.Remove(dbEntry);
                 context.SaveChanges();
             }
             return dbEntry;

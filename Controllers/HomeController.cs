@@ -1,37 +1,36 @@
 using System.Diagnostics;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc;
 using BlogSite.Models;
 
-namespace BlogSite.Controllers;
-
-public class HomeController : Controller
+namespace BlogSite.Controllers
 {
-    
+    public class BlogPostController : Controller
     {
-        IBlogRepository repository;
-        public BlogController(IBlogRepository repPassedIn)
+        IBlogPostRepository repository;
+        public BlogPostController(IBlogPostRepository repPassedIn)
         {
             repository = repPassedIn; 
         }
-        // GET: Blog
-        public ActionResult InventoryList()
+        // GET: BlogPost
+        public ActionResult BlogPostList()
         {
-            return View(repository.Blogs.OrderBy(p => p.DateAdded));
+            return View(repository.BlogPosts.OrderBy(p => p.DateAdded));
         }
         public ActionResult Edit(int blogId)
         {
-            Blog blog = repository.Blogs.FirstOrDefault(p => p.BlogID == blogId);
-            ViewBag.BlogID = new SelectList(repository.Blogs, "BlogID", "BlogModel", blog.BlogID);
+            BlogPost blog = repository.BlogPosts.FirstOrDefault(p => p.Id == blogId);
+            ViewBag.Id = new SelectList(repository.BlogPosts, "Id", "Title", blog.Id);
             return View(blog);
         }
 
         [HttpPost]
-        public ActionResult Edit(Blog blog)
+        public ActionResult Edit(BlogPost blog)
         {
             if (ModelState.IsValid)
             {
-                repository.SaveBlog(blog);
-                TempData["message"] = string.Format("{0} has been saved", blog.BlogModel);
+                repository.SaveBlogPost(blog);
+                TempData["message"] = string.Format("{0} has been saved", blog.Title);
                 return RedirectToAction("InventoryList");
             }
             else
@@ -42,40 +41,43 @@ public class HomeController : Controller
         }
         public ActionResult Create()
         {
-            ViewBag.BlogID = new SelectList(repository.Blogs, "BlogID", "BlogModel");
-            return View("Edit", new Blog());
+            ViewBag.Id = new SelectList(repository.BlogPosts, "Id", "Title");
+            return View("Edit", new BlogPost());
         }
-        public ActionResult Delete(int BlogId)
+        public ActionResult Delete(int BlogPostId)
         {
-            Blog deletedBlog = repository.DeleteBlog(BlogId);
-            if (deletedBlog != null)
+            BlogPost deletedBlogPost = repository.DeleteBlogPost(BlogPostId);
+            if (deletedBlogPost != null)
             {
-                TempData["message"] = string.Format("{0} was deleted", deletedBlog.BlogModel);
+                TempData["message"] = string.Format("{0} was deleted", deletedBlogPost.Title);
             }
             return RedirectToAction("InventoryList");
         }
-    }
-}
-    private readonly ILogger<HomeController> _logger;
 
-    public HomeController(ILogger<HomeController> logger)
-    {
-        _logger = logger;
-    }
+/*
+        private readonly ILogger<HomeController> _logger;
 
-    public IActionResult Index()
-    {
-        return View();
-    }
+        public HomeController(ILogger<HomeController> logger)
+        {
+            _logger = logger;
+        }
 
-    public IActionResult Privacy()
-    {
-        return View();
-    }
+        public IActionResult Index()
+        {
+            return View();
+        }
 
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+*/
     }
+    
 }

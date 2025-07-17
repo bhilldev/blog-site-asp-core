@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace BlogSite.Models
 {
-    public interface IBlogRepository
+    public interface IBlogPostRepository
     {
-        IEnumerable<Blog> Blogs { get; }
-        void SaveBlog(Blog blog);
-        Blog DeleteBlog(int BlogID); } }
+        IEnumerable<BlogPost> BlogPosts { get; }
+        void SaveBlogPost(BlogPost blogPost);
+        BlogPost DeleteBlogPost(int BlogID);
+    }
+}
