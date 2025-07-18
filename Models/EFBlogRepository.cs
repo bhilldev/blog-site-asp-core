@@ -7,7 +7,7 @@ namespace BlogSite.Models
 {
     public class EFBlogPostRepository : IBlogPostRepository
     {
-        private BlogDbContext context = new BlogDbContext();
+        private readonly BlogDbContext context;
         public IEnumerable<BlogPost> BlogPosts
         {
             get { return context.BlogPosts; }
